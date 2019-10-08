@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="colorPrimary">#FE4445</color>
+  <color name="colorSelectedItem">#FE4445</color>
+  <color name="colorPrimaryDark">#FF0000</color>
+  <color name="colorSecondary">#D9292A</color>
+  <color name="colorAccent">#D81B60</color>
+  <color name="colorUnselectedItem">#D5D5D5</color>
+</resources>

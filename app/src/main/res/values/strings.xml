@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">PTR</string>
+
+  <!--  Bottom navigation menu titles-->
+  <string name="bottom_nav_events">Events</string>
+  <string name="bottom_nav_gallery">Gallery</string>
+  <string name="bottom_nav_manifesto">Manifesto</string>
+  <string name="bottom_nav_candidates">Candidates</string>
+  <string name="bottom_nav_more">More</string>
+
+
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  >
+
+
+
+  <androidx.appcompat.widget.AppCompatButton
+    android:id="@+id/like_video_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/like_video_text"
+    android:padding="15dp"
+    android:text="Allex travailliste!"
+    />
+
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/like_video_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toLeftOf="@id/like_video_button"
+    app:layout_constraintRight_toRightOf="@id/like_video_button"
+    android:textSize="18sp"
+    android:text="sdsdsdsdsdds"
+    />
+
+</merge>
