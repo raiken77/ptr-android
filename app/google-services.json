@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "548202050587",
+    "firebase_url": "https://ptr-admin-web.firebaseio.com",
+    "project_id": "ptr-admin-web",
+    "storage_bucket": "ptr-admin-web.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548202050587:android:9d7cbcdb22dd75ce9234be",
+        "android_client_info": {
+          "package_name": "com.mru.ptr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548202050587-7rr2u6l4lqjhop2av9oug7d1hgcdg6br.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2mZ7cct-8J-XbAahE09czmoOaNosAjhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548202050587-7rr2u6l4lqjhop2av9oug7d1hgcdg6br.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "548202050587-60j36sgi18nm3np5fi5mn6e0jgfenlcp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "PartiTravailliste.Parti-Travailliste"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
