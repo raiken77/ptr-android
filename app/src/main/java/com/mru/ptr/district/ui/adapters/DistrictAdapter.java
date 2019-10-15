@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.mru.ptr.R;
 import com.mru.ptr.district.ui.adapters.DistrictAdapter.DistrictViewHolder;
-import com.mru.ptr.district.ui.model.DistrictRow;
+import com.mru.ptr.district.ui.model.DistrictDataModel;
 import com.mru.ptr.utils.RecyclerViewClickListener;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -20,12 +20,12 @@ import java.util.List;
  */
 public class DistrictAdapter extends RecyclerView.Adapter<DistrictViewHolder> {
 
-  private List<DistrictRow> districtRows;
+  private List<DistrictDataModel> districtDataModels;
   private RecyclerViewClickListener clickListener;
 
-  public DistrictAdapter(List<DistrictRow> districtRows,
+  public DistrictAdapter(List<DistrictDataModel> districtDataModels,
     RecyclerViewClickListener clickListener) {
-    this.districtRows = districtRows;
+    this.districtDataModels = districtDataModels;
     this.clickListener = clickListener;
   }
 
@@ -42,16 +42,25 @@ public class DistrictAdapter extends RecyclerView.Adapter<DistrictViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull DistrictViewHolder holder, int position) {
-    DistrictRow row = districtRows.get(position);
+    DistrictDataModel row = districtDataModels.get(position);
 
     if(row != null) {
       holder.bindData(row);
     }
   }
 
+  public void setData(List<DistrictDataModel> districts) {
+    this.districtDataModels = districts;
+    notifyDataSetChanged();
+  }
+
+  public DistrictDataModel getModelAt(int position) {
+    return this.districtDataModels.get(position);
+  }
+
   @Override
   public int getItemCount() {
-    return districtRows.size();
+    return districtDataModels.size();
   }
 
   public static class DistrictViewHolder extends ViewHolder implements View.OnClickListener {
@@ -71,12 +80,12 @@ public class DistrictAdapter extends RecyclerView.Adapter<DistrictViewHolder> {
     @Override
     public void onClick(View view) {
       if(weakClickListener.get() != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-        weakClickListener.get().onItemSelected(getAdapterPosition());
+        weakClickListener.get().onItemSelected(view, getAdapterPosition());
       }
     }
 
-    public void bindData(DistrictRow districtRow) {
-      districtNumberTextView.setText(districtRow.districtNumber);
+    public void bindData(DistrictDataModel districtDataModel) {
+      districtNumberTextView.setText(districtDataModel.name);
     }
   }
 }

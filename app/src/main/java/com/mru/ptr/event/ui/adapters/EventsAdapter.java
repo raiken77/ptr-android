@@ -1,29 +1,45 @@
 package com.mru.ptr.event.ui.adapters;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.mru.ptr.R;
 import com.mru.ptr.event.ui.adapters.EventsAdapter.EventViewHolder;
-import com.mru.ptr.event.ui.model.EventRow;
+import com.mru.ptr.event.ui.model.EventDataModel;
 import com.mru.ptr.utils.RecyclerViewClickListener;
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by Jonathan on 2019-10-10.
  */
 public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
-  private List<EventRow> events;
+  private List<EventDataModel> events;
   private RecyclerViewClickListener clickListener;
 
-  public EventsAdapter(List<EventRow> events, RecyclerViewClickListener clickListener) {
+  public EventsAdapter(List<EventDataModel> events, RecyclerViewClickListener clickListener) {
     this.events = events;
     this.clickListener = clickListener;
+  }
+
+  public EventDataModel getDataModelByPosition(int position) {
+    if(position < 0 || position > events.size() - 1) {
+      return null;
+    }
+
+    return events.get(position);
+
   }
 
   @NonNull
@@ -37,11 +53,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-    EventRow row = events.get(position);
+    EventDataModel row = events.get(position);
 
     if(row != null) {
+      String transitionName = row.title + ' ' + new Random().nextInt(40);
+      ViewCompat.setTransitionName(holder.card, transitionName);
       holder.bindData(row);
     }
+  }
+
+  public void setData(List<EventDataModel> events) {
+    this.events  = events;
+    notifyDataSetChanged();
   }
 
   @Override
@@ -54,26 +77,33 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
     private WeakReference<RecyclerViewClickListener> weakClickListener;
     private AppCompatTextView meetingTitle;
     private AppCompatTextView meetingDate;
+    private CardView card;
+     AppCompatImageView meetingImage;
 
 
     public EventViewHolder(@NonNull View itemView, RecyclerViewClickListener clickListener) {
       super(itemView);
       this.meetingTitle = itemView.findViewById(R.id.event_item_title);
       this.meetingDate  = itemView.findViewById(R.id.event_item_date);
+      this.meetingImage = itemView.findViewById(R.id.event_item_image);
+      this.card = itemView.findViewById(R.id.card_container);
       this.weakClickListener = new WeakReference<>(clickListener);
       itemView.setOnClickListener(this);
     }
 
-    public void bindData(EventRow eventData) {
-      meetingTitle.setText(eventData.meetingTitle);
-      meetingDate.setText(eventData.meetingDate);
+    public void bindData(EventDataModel eventData) {
+      Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+      cal.setTimeInMillis(eventData.dateTime * 1000L);
+      String date = DateFormat.format("dd MMM yyyy", cal).toString();
+      meetingTitle.setText(eventData.title);
+      meetingDate.setText(date);
     }
 
     @Override
     public void onClick(View view) {
       if(weakClickListener.get() != null) {
         if(getAdapterPosition() != RecyclerView.NO_POSITION) {
-          weakClickListener.get().onItemSelected(getAdapterPosition());
+          weakClickListener.get().onItemSelected(this.card, getAdapterPosition());
         }
       }
     }

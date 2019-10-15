@@ -1,29 +1,34 @@
 package com.mru.ptr.district.ui.adapters;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.bumptech.glide.Glide;
 import com.mru.ptr.R;
 import com.mru.ptr.district.ui.adapters.CandidateDetailAdapter.CandidateDetailViewHolder;
-import com.mru.ptr.district.ui.model.CandidateDetailRow;
+import com.mru.ptr.district.ui.model.CandidateDataModel;
 import com.mru.ptr.utils.RecyclerViewClickListener;
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by Jonathan on 2019-10-10.
  */
 public class CandidateDetailAdapter extends RecyclerView.Adapter<CandidateDetailViewHolder> {
 
-  private List<CandidateDetailRow> candidateDetails;
+  private List<CandidateDataModel> candidateDetails;
   private RecyclerViewClickListener clickListener;
 
-  public CandidateDetailAdapter(List<CandidateDetailRow> candidateDetails, RecyclerViewClickListener clickListener) {
+  public CandidateDetailAdapter(List<CandidateDataModel> candidateDetails, RecyclerViewClickListener clickListener) {
     this.candidateDetails = candidateDetails;
     this.clickListener = clickListener;
   }
@@ -38,11 +43,21 @@ public class CandidateDetailAdapter extends RecyclerView.Adapter<CandidateDetail
 
   @Override
   public void onBindViewHolder(@NonNull CandidateDetailViewHolder holder, int position) {
-    CandidateDetailRow row = candidateDetails.get(position);
+    CandidateDataModel row = candidateDetails.get(position);
 
     if(row != null) {
       holder.bindData(row);
+      ViewCompat.setTransitionName(holder.candidateImage, "Row: " + new Random().nextInt(400));
     }
+  }
+
+  public void setData(List<CandidateDataModel> candidateDetails) {
+    this.candidateDetails = candidateDetails;
+    notifyDataSetChanged();
+  }
+
+  public CandidateDataModel getItemAtPosition(int position) {
+    return this.candidateDetails.get(position);
   }
 
   @Override
@@ -55,25 +70,38 @@ public class CandidateDetailAdapter extends RecyclerView.Adapter<CandidateDetail
     private WeakReference<RecyclerViewClickListener> clickListenerWeakReference;
     private AppCompatImageView candidateImage;
     private AppCompatTextView candidateName;
-    private AppCompatTextView candidateDescription;
-    private AppCompatImageView candidateVideoThumbnail;
+    private AppCompatTextView candidateParty;
+
 
     public CandidateDetailViewHolder(@NonNull View itemView, RecyclerViewClickListener clickListener) {
       super(itemView);
       clickListenerWeakReference = new WeakReference<>(clickListener);
       candidateImage = itemView.findViewById(R.id.candidate_image);
+      candidateName = itemView.findViewById(R.id.candidate_full_name);
+      candidateParty = itemView.findViewById(R.id.candidate_party);
 
       itemView.setOnClickListener(this);
+      candidateImage.setOnClickListener(this);
     }
 
-    public void bindData(CandidateDetailRow row) {
-
+    public void bindData(CandidateDataModel row) {
+      candidateName.setText(String.format(Locale.ENGLISH, "%s %s", row.name, row.familyName));
+      candidateParty.setText(row.party);
+      if(!TextUtils.isEmpty(row.imageUrl)) {
+        Glide.with(itemView.getContext())
+          .load(row.imageUrl)
+          .into(candidateImage);
+      }
+      else {
+        Glide.with(itemView.getContext())
+          .clear(candidateImage);
+      }
     }
 
     @Override
     public void onClick(View view) {
       if(clickListenerWeakReference.get() != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-        clickListenerWeakReference.get().onItemSelected(getAdapterPosition());
+        clickListenerWeakReference.get().onItemSelected(this.candidateImage, getAdapterPosition());
       }
     }
   }

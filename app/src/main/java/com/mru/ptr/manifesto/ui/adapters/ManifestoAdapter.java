@@ -1,5 +1,6 @@
 package com.mru.ptr.manifesto.ui.adapters;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,9 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.mru.ptr.R;
 import com.mru.ptr.manifesto.ui.adapters.ManifestoAdapter.ManifestoViewHolder;
-import com.mru.ptr.manifesto.ui.model.ManifestoRow;
+import com.mru.ptr.manifesto.ui.model.ManifestoDataModel;
 import com.mru.ptr.utils.RecyclerViewClickListener;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -19,10 +21,10 @@ import java.util.List;
  */
 public class ManifestoAdapter extends RecyclerView.Adapter<ManifestoViewHolder> {
 
-  private List<ManifestoRow> manifestoRows;
+  private List<ManifestoDataModel> manifestoRows;
   private RecyclerViewClickListener clickListener;
 
-  public ManifestoAdapter(List<ManifestoRow> manifestoRows, RecyclerViewClickListener clickListener) {
+  public ManifestoAdapter(List<ManifestoDataModel> manifestoRows, RecyclerViewClickListener clickListener) {
     this.manifestoRows = manifestoRows;
     this.clickListener = clickListener;
   }
@@ -38,11 +40,20 @@ public class ManifestoAdapter extends RecyclerView.Adapter<ManifestoViewHolder> 
 
   @Override
   public void onBindViewHolder(@NonNull ManifestoViewHolder holder, int position) {
-    ManifestoRow row = this.manifestoRows.get(position);
+    ManifestoDataModel row = this.manifestoRows.get(position);
 
     if(row != null) {
       holder.bindData(row);
     }
+  }
+
+  public void setData(List<ManifestoDataModel> manifestoRows) {
+    this.manifestoRows = manifestoRows;
+    notifyDataSetChanged();
+  }
+
+  public ManifestoDataModel getManifestoAtPosition(int position) {
+    return this.manifestoRows.get(position);
   }
 
   @Override
@@ -64,14 +75,21 @@ public class ManifestoAdapter extends RecyclerView.Adapter<ManifestoViewHolder> 
       itemView.setOnClickListener(this);
     }
 
-    public void bindData(ManifestoRow data) {
-      manifestoTitle.setText(data.manifestoTitle);
+    public void bindData(ManifestoDataModel data) {
+      manifestoTitle.setText(data.title);
+      if(!TextUtils.isEmpty(data.imageUrl)) {
+        Glide.with(itemView.getContext())
+          .load(data.imageUrl)
+          .into(manifestoImageView);
+      }
+
+      manifestoImageView.setBackgroundResource(data.drawableRes);
     }
 
     @Override
     public void onClick(View view) {
       if(clickListenerWeakReference.get() != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-        clickListenerWeakReference.get().onItemSelected(getAdapterPosition());
+        clickListenerWeakReference.get().onItemSelected(view, getAdapterPosition());
       }
     }
   }

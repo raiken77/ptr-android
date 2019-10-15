@@ -19,3 +19,26 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#Firebase and Glide rules
+-keepattributes *Annotation*, Signature, Exception
+
+
+# App data models
+-keepclassmembers class com.mru.ptr.district.ui.model.** {*;}
+-keepclassmembers class com.mru.ptr.event.ui.model.** {*;}
+-keepclassmembers class com.mru.ptr.event.ui.model.** {*;}
+-keepclassmembers class com.mru.ptr.gallery.ui.VideoDataModel
+-keepclassmembers class com.mru.ptr.gallery.ui.PhotoDataModel
+-keepclassmembers class com.mru.ptr.manifesto.ui.model.** {*;}
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+
+

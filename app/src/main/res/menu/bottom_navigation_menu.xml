@@ -2,26 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
     android:id="@+id/bottom_navigation_item_events"
-    android:icon="@drawable/ic_block_black_24dp"
+    android:icon="@drawable/ic_event"
     android:title="@string/bottom_nav_events" />
 
   <item
     android:id="@+id/bottom_navigation_item_gallery"
-    android:icon="@drawable/ic_block_black_24dp"
+    android:icon="@drawable/ic_gallery"
     android:title="@string/bottom_nav_gallery" />
 
   <item
     android:id="@+id/bottom_navigation_item_manifesto"
-    android:icon="@drawable/ic_block_black_24dp"
+    android:icon="@drawable/ic_manifesto"
     android:title="@string/bottom_nav_manifesto"/>
 
   <item
     android:id="@+id/bottom_navigation_item_candidates"
-    android:icon="@drawable/ic_block_black_24dp"
+    android:icon="@drawable/ic_candidates"
     android:title="@string/bottom_nav_candidates"/>
 
   <item
     android:id="@+id/bottom_navigation_item_more"
-    android:icon="@drawable/ic_block_black_24dp"
+    android:icon="@drawable/ic_more"
     android:title="@string/bottom_nav_more"/>
 </menu>

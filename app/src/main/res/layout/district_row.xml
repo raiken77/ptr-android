@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+  android:background="@color/district_row"
+  >
 
 
   <androidx.appcompat.widget.AppCompatImageView
@@ -14,6 +16,7 @@
     />
 
   <androidx.appcompat.widget.AppCompatTextView
+    style="@style/BlackTextRegularStyle"
     android:id="@+id/district_number"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -22,5 +25,6 @@
     app:layout_constraintLeft_toLeftOf="parent"
     android:layout_marginLeft="20dp"
     android:text="CLP20"
+    android:textColor="@android:color/white"
     />
 </androidx.constraintlayout.widget.ConstraintLayout>
