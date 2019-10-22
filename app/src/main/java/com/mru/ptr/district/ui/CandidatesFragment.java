@@ -1,7 +1,6 @@
 package com.mru.ptr.district.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.mru.ptr.BackEnabledToolbarFragment;
 import com.mru.ptr.MainActivity;
 import com.mru.ptr.MarginItemDecoration;
 import com.mru.ptr.R;
-import com.mru.ptr.Response;
 import com.mru.ptr.district.ui.adapters.CandidateDetailAdapter;
 import com.mru.ptr.district.ui.model.CandidateDataModel;
 import com.mru.ptr.district.ui.model.DistrictDataModel;
@@ -32,7 +30,9 @@ import java.util.List;
 /**
  * Created by Jonathan on 2019-10-16.
  */
-public class CandidatesFragment extends BackEnabledToolbarFragment implements RecyclerViewClickListener {
+public class CandidatesFragment extends BackEnabledToolbarFragment implements
+  RecyclerViewClickListener {
+
   RecyclerView candidateDetailList;
   CandidateDetailAdapter candidateDetailAdapter;
   List<CandidateDataModel> candidateDataModels;
@@ -73,16 +73,19 @@ public class CandidatesFragment extends BackEnabledToolbarFragment implements Re
         @Override
         public void onChanged(DistrictDataModel districtDataModel) {
           districtViewModel.fetchCandidatesByDistrict(districtDataModel.id).observe(
-            getViewLifecycleOwner(), new Observer<Response<List<CandidateDataModel>>>() {
+            getViewLifecycleOwner(), new Observer<List<CandidateDataModel>>() {
               @Override
-              public void onChanged(Response<List<CandidateDataModel>> listResponse) {
+              public void onChanged(List<CandidateDataModel> candidateDataModels) {
                 progressBar.setVisibility(View.GONE);
-                if(TextUtils.isEmpty(listResponse.errorMessage)) {
-                  candidateDetailAdapter.setData(listResponse.data);
+
+                if(candidateDataModels == null) {
+                  if (candidateDetailAdapter != null
+                    && candidateDetailAdapter.getItemCount() == 0) {
+                    errorText.setText("No candidates available");
+                  }
                 }
                 else {
-                  errorText.setVisibility(View.VISIBLE);
-                  errorText.setText("No Candidates for district");
+                  candidateDetailAdapter.setData(candidateDataModels);
                 }
               }
             });
@@ -93,8 +96,9 @@ public class CandidatesFragment extends BackEnabledToolbarFragment implements Re
   }
 
   @Override
-  public void onItemSelected(View view,int position) {
-    if(getActivity() != null && getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+  public void onItemSelected(View view, int position) {
+    if (getActivity() != null && getLifecycle().getCurrentState()
+      .isAtLeast(Lifecycle.State.STARTED)) {
       districtViewModel.selectCandidate(candidateDetailAdapter.getItemAtPosition(position));
       ((MainActivity) getActivity()).showCandidateDetailPage(view);
     }

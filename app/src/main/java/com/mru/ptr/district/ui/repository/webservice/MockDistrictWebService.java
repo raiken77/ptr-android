@@ -16,45 +16,35 @@ import java.util.List;
 public class MockDistrictWebService implements DistrictWebService {
 
   private HashMap<String, List<CandidateDataModel>> candidatesByDistrict;
+  private DistrictWebServiceCallback callback;
 
-  public MockDistrictWebService() {
+  public MockDistrictWebService(DistrictWebServiceCallback callback) {
     candidatesByDistrict = new HashMap<>();
+    this.callback = callback;
     populateMockCandidates();
   }
 
   @Override
-  public LiveData<Response<List<DistrictDataModel>>> fetchAllDistricts() {
-    final MutableLiveData<Response<List<DistrictDataModel>>> districts = new MutableLiveData<>();
-    districts.setValue(createMockEvents());
-    return districts;
+  public void fetchAllDistricts() {
+    if(this.callback != null) {
+      this.callback.onFetched(createMockDistricts());
+    }
   }
 
   @Override
-  public LiveData<Response<List<CandidateDataModel>>> fetchAllCandidatesByDistrict(String districtId) {
-    final MutableLiveData<Response<List<CandidateDataModel>>> candidates = new MutableLiveData<>();
-
-    List<CandidateDataModel> candidatesForDistrict = this.candidatesByDistrict.get(districtId);
-    Response<List<CandidateDataModel>> response = new Response<>();
-    response
-      .setData(candidatesForDistrict)
-      .setStatus(ResponseStatus.SUCCESS)
-      .setErrorMessage(null);
-
-    candidates.setValue(response);
-    return candidates;
+  public void fetchAllCandidatesByDistrict(String districtId) {
+    if(this.callback != null){
+      this.callback.onAssociatedCandidatesfetched(this.candidatesByDistrict.get(districtId));
+    }
   }
 
-  private Response<List<DistrictDataModel>> createMockEvents() {
+  private List<DistrictDataModel> createMockDistricts() {
     List<DistrictDataModel> districts = new ArrayList<>();
     districts.add(new DistrictDataModel().setId("1").setName("CLP 1"));
     districts.add(new DistrictDataModel().setId("2").setName("CLP 2"));
     districts.add(new DistrictDataModel().setId("3").setName("CLP 3"));
 
-    return
-      new Response<List<DistrictDataModel>>()
-        .setStatus(ResponseStatus.SUCCESS)
-        .setData(districts)
-        .setErrorMessage(null);
+    return districts;
   }
 
 
@@ -92,5 +82,11 @@ public class MockDistrictWebService implements DistrictWebService {
 
     candidatesByDistrict.put("3", thirdDistrictCandidates);
 
+  }
+
+
+  @Override
+  public void cleanWebServiceCallback() {
+    this.callback = null;
   }
 }

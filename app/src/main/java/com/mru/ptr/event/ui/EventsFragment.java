@@ -61,16 +61,15 @@ public class EventsFragment extends BackDisabledToolbarFragment implements Recyc
     eventsRecyclerView.setAdapter(eventsAdapter);
 
     eventsViewModel.fetchAllEvents().observe(getViewLifecycleOwner(),
-      new Observer<Response<List<EventDataModel>>>() {
+      new Observer<List<EventDataModel>>() {
         @Override
-        public void onChanged(Response<List<EventDataModel>> listResponse) {
+        public void onChanged(List<EventDataModel> eventDataModels) {
           progressBar.setVisibility(View.GONE);
-          if(TextUtils.isEmpty(listResponse.errorMessage)) {
-            eventsAdapter.setData(listResponse.data);
+          if(eventDataModels == null) {
+            errorText.setText("No Events");
           }
           else {
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("No Events");
+            eventsAdapter.setData(eventDataModels);
           }
         }
       });

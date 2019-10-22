@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class DistrictDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  public abstract void save(List<DistrictDataModel> photoDataModels);
+  public abstract void save(List<DistrictDataModel> districtDataModels);
 
   @Query("SELECT * from district")
   public abstract LiveData<List<DistrictDataModel>> load();

@@ -69,16 +69,17 @@ public class ManifestosFragment extends BackEnabledToolbarFragment implements Re
         @Override
         public void onChanged(ManifestoCategoryDataModel dataModel) {
           manifestoViewModel.getAllManifestosByCategory(dataModel.id).observe(
-            getViewLifecycleOwner(), new Observer<Response<List<ManifestoDataModel>>>() {
+            getViewLifecycleOwner(), new Observer<List<ManifestoDataModel>>() {
               @Override
-              public void onChanged(Response<List<ManifestoDataModel>> listResponse) {
+              public void onChanged(List<ManifestoDataModel> manifestoDataModels) {
                 progressBar.setVisibility(View.GONE);
-                if(TextUtils.isEmpty(listResponse.errorMessage)) {
-                  adapter.setData(listResponse.data);
+                if(manifestoDataModels == null) {
+                  if (adapter != null && adapter.getItemCount() == 0) {
+
+                  }
                 }
                 else {
-                  errorText.setVisibility(View.VISIBLE);
-                  errorText.setText("No Manifestos");
+                  adapter.setData(manifestoDataModels);
                 }
               }
             });

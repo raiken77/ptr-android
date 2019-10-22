@@ -1,9 +1,5 @@
 package com.mru.ptr.event.ui.repository.webservice;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import com.mru.ptr.Response;
-import com.mru.ptr.ResponseStatus;
 import com.mru.ptr.event.ui.model.EventDataModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +9,22 @@ import java.util.List;
  */
 public class EventMockWebService implements EventWebService {
 
-  @Override
-  public LiveData<Response<List<EventDataModel>>> fetchAllOrderedEvents() {
-    final MutableLiveData<Response<List<EventDataModel>>> events = new MutableLiveData<>();
-    events.setValue(createMockEvents());
-    return events;
+  private EventWebServiceCallback callbackInterface;
+
+  public EventMockWebService(EventWebServiceCallback callbackInterface) {
+    this.callbackInterface = callbackInterface;
   }
 
 
-  private Response<List<EventDataModel>> createMockEvents() {
+  @Override
+  public void fetchAllOrderedEvents() {
+    if(this.callbackInterface != null) {
+      this.callbackInterface.onFetched(createMockEvents());
+    }
+  }
+
+
+  private List<EventDataModel> createMockEvents() {
     List<EventDataModel> events = new ArrayList<>();
     events.add(new EventDataModel().setTitle("Event 1").setDescription("My event 0").setState("UPCOMING").setDateTime(1571948304000L));
     events.add(new EventDataModel().setTitle("Event 2").setDescription("My event 1").setState("UPCOMING").setDateTime(1572380304000L));
@@ -31,10 +34,11 @@ public class EventMockWebService implements EventWebService {
     events.add(new EventDataModel().setTitle("Event 6").setDescription("My event 5").setState("UPCOMING").setDateTime(1574194704000L));
     events.add(new EventDataModel().setTitle("Event 7").setDescription("My event 6").setState("UPCOMING").setDateTime(1574626704000L));
 
-    return
-      new Response<List<EventDataModel>>()
-      .setStatus(ResponseStatus.SUCCESS)
-      .setData(events)
-      .setErrorMessage(null);
+    return events;
+  }
+
+  @Override
+  public void cleanWebServiceCallback() {
+    this.callbackInterface = null;
   }
 }

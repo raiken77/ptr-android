@@ -12,7 +12,7 @@ public class PhotoRepository {
   private PhotoWebService photoWebService;
 
   public PhotoRepository() {
-    this.photoWebService = new FirebasePhotoWebservice();
+    this.photoWebService = new MockPhotoWebService();
   }
 
 

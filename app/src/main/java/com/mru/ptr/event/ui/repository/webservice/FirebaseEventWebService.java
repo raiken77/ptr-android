@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mru.ptr.Response;
 import com.mru.ptr.ResponseStatus;
+import com.mru.ptr.district.ui.repository.disk.CandidateDao;
 import com.mru.ptr.event.ui.model.EventDataModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,33 +21,31 @@ import java.util.List;
 public class FirebaseEventWebService implements EventWebService{
   private static final String BASE_DATABASE_REF = "Events";
   private DatabaseReference dbRef;
+  private EventWebServiceCallback callback;
 
 
-  public FirebaseEventWebService() {
+  public FirebaseEventWebService(EventWebServiceCallback callback) {
     dbRef = FirebaseDatabase.getInstance().getReference(BASE_DATABASE_REF);
+    this.callback = callback;
   }
 
 
   @Override
-  public LiveData<Response<List<EventDataModel>>> fetchAllOrderedEvents() {
-    final MutableLiveData<Response<List<EventDataModel>>> events = new MutableLiveData<>();
+  public void fetchAllOrderedEvents() {
 
     dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         List<EventDataModel> eventsRetrieved = new ArrayList<>();
-        Response<List<EventDataModel>> responseEvents = new Response<>();
 
         for(DataSnapshot event : dataSnapshot.getChildren()) {
           eventsRetrieved.add(event.getValue(EventDataModel.class));
         }
 
-        responseEvents
-          .setData(eventsRetrieved)
-          .setErrorMessage(null)
-          .setStatus(ResponseStatus.SUCCESS);
+        if(callback != null) {
+          callback.onFetched(eventsRetrieved);
+        }
 
-        events.postValue(responseEvents);
       }
 
       @Override
@@ -54,6 +53,10 @@ public class FirebaseEventWebService implements EventWebService{
         //TODO Handle errors here
       }
     });
-    return events;
+  }
+
+  @Override
+  public void cleanWebServiceCallback() {
+    this.callback = null;
   }
 }

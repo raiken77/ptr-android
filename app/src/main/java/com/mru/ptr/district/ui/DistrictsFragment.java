@@ -70,16 +70,17 @@ public class DistrictsFragment extends BackDisabledToolbarFragment implements Re
     districtRecyclerView.setAdapter(districtAdapter);
 
     districtViewModel.fetchAllDistricts().observe(getViewLifecycleOwner(),
-      new Observer<Response<List<DistrictDataModel>>>() {
+      new Observer<List<DistrictDataModel>>() {
         @Override
-        public void onChanged(Response<List<DistrictDataModel>> listResponse) {
-          progressBar.setVisibility(View.GONE);
-          if(TextUtils.isEmpty(listResponse.errorMessage)) {
-            districtAdapter.setData(listResponse.data);
+        public void onChanged(List<DistrictDataModel> districtDataModels) {
+            progressBar.setVisibility(View.GONE);
+          if(districtDataModels == null) {
+            if(districtAdapter.getItemCount() == 0) {
+              errorText.setText("No districts available");
+            }
           }
           else {
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("No Districts");
+            districtAdapter.setData(districtDataModels);
           }
         }
       });

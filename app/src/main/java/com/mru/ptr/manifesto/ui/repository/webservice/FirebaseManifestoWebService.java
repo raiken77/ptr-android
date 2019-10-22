@@ -22,33 +22,28 @@ public class FirebaseManifestoWebService implements ManifestoWebService {
 
   private final static String MANIFESTO_PATH = "Manifesto";
   private final static String MANIFESTO_CATEGORIES_PATH = "ManifestoCategory";
+  private ManifestoWebServiceCallback callback;
 
-  public FirebaseManifestoWebService() {
+  public FirebaseManifestoWebService(ManifestoWebServiceCallback callback) {
+    this.callback = callback;
   }
 
   @Override
-  public LiveData<Response<List<ManifestoCategoryDataModel>>> fetchManifestoCategories() {
-    final MutableLiveData<Response<List<ManifestoCategoryDataModel>>> response = new MutableLiveData<>();
+  public void fetchManifestoCategories() {
 
     FirebaseDatabase.getInstance().getReference(MANIFESTO_CATEGORIES_PATH)
       .addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
           List<ManifestoCategoryDataModel> categories = new ArrayList<>();
-          Response<List<ManifestoCategoryDataModel>> categoryResponse = new Response<>();
 
           for (DataSnapshot child : dataSnapshot.getChildren()) {
             categories.add(child.getValue(ManifestoCategoryDataModel.class));
           }
 
-          categoryResponse
-            .setData(categories)
-            .setStatus(ResponseStatus.SUCCESS)
-            .setErrorMessage(null);
-
-          response.setValue(categoryResponse);
-
-
+          if(callback != null) {
+            callback.onFetched(categories);
+          }
         }
 
         @Override
@@ -57,31 +52,24 @@ public class FirebaseManifestoWebService implements ManifestoWebService {
         }
       });
 
-    return response;
   }
 
   @Override
-  public LiveData<Response<List<ManifestoDataModel>>> fetchManifestosByCategoryId(String categoryId) {
+  public void fetchManifestosByCategoryId(final String categoryId) {
     String newPath = String.format(Locale.ENGLISH, "%s/%s", MANIFESTO_PATH, categoryId);
 
-    final MutableLiveData<Response<List<ManifestoDataModel>>> manifestoResponse = new MutableLiveData<>();
     FirebaseDatabase.getInstance().getReference(newPath)
       .addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
           List<ManifestoDataModel> manifestos = new ArrayList<>();
-          Response<List<ManifestoDataModel>> response = new Response<>();
 
           for(DataSnapshot child : dataSnapshot.getChildren()) {
             manifestos.add(child.getValue(ManifestoDataModel.class));
           }
-
-          response
-            .setData(manifestos)
-            .setStatus(ResponseStatus.SUCCESS)
-            .setErrorMessage(null);
-
-          manifestoResponse.setValue(response);
+          if(callback != null) {
+            callback.onManifestosRetrieved(manifestos);
+          }
         }
 
         @Override
@@ -90,6 +78,10 @@ public class FirebaseManifestoWebService implements ManifestoWebService {
         }
       });
 
-    return manifestoResponse;
+  }
+
+  @Override
+  public void cleanWebServiceCallback() {
+    this.callback = null;
   }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.mru.ptr.Response;
 import com.mru.ptr.ResponseStatus;
+import com.mru.ptr.district.ui.repository.disk.CandidateDao;
 import com.mru.ptr.manifesto.ui.model.ManifestoCategoryDataModel;
 import com.mru.ptr.manifesto.ui.model.ManifestoDataModel;
 import java.util.ArrayList;
@@ -16,37 +17,26 @@ import java.util.List;
 public class MockManifestoWebService implements ManifestoWebService {
 
   private HashMap<String, List<ManifestoDataModel>> categoryManifestos;
+  private ManifestoWebServiceCallback callback;
 
-  public MockManifestoWebService() {
+  public MockManifestoWebService(ManifestoWebServiceCallback callback) {
+    this.callback = callback;
     categoryManifestos = new HashMap<>();
     populateManifestoCategories();
   }
 
   @Override
-  public LiveData<Response<List<ManifestoCategoryDataModel>>> fetchManifestoCategories() {
-    final MutableLiveData<Response<List<ManifestoCategoryDataModel>>> responseMutableLiveData = new MutableLiveData<>();
-    Response<List<ManifestoCategoryDataModel>> categoryResponse = new Response<>();
-    categoryResponse
-      .setData(createMockManifestoCategory())
-      .setStatus(ResponseStatus.SUCCESS)
-      .setErrorMessage(null);
-
-    responseMutableLiveData.setValue(categoryResponse);
-    return responseMutableLiveData;
+  public void fetchManifestoCategories() {
+    if(callback != null) {
+      callback.onFetched(createMockManifestoCategory());
+    }
   }
 
   @Override
-  public LiveData<Response<List<ManifestoDataModel>>> fetchManifestosByCategoryId(String categoryId) {
-    final MutableLiveData<Response<List<ManifestoDataModel>>> responseMutableLiveData = new MutableLiveData<>();
-    Response<List<ManifestoDataModel>> categoryResponse = new Response<>();
-
-    categoryResponse
-      .setData(this.categoryManifestos.get(categoryId))
-      .setStatus(ResponseStatus.SUCCESS)
-      .setErrorMessage(null);
-
-    responseMutableLiveData.setValue(categoryResponse);
-    return responseMutableLiveData;
+  public void fetchManifestosByCategoryId(String categoryId) {
+    if(callback != null) {
+      callback.onManifestosRetrieved(this.categoryManifestos.get(categoryId));
+    }
   }
 
   private List<ManifestoCategoryDataModel> createMockManifestoCategory() {
@@ -81,5 +71,8 @@ public class MockManifestoWebService implements ManifestoWebService {
     this.categoryManifestos.put("2", businessManifestos);
   }
 
+  @Override
+  public void cleanWebServiceCallback() {
 
+  }
 }

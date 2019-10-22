@@ -26,13 +26,14 @@ public class DistrictViewModel extends ViewModel {
   }
 
 
-  public LiveData<Response<List<DistrictDataModel>>> fetchAllDistricts() {
-    return districtRepository.fetchAllDistricts();
+  public LiveData<List<DistrictDataModel>> fetchAllDistricts() {
+    districtRepository.fetchAllDistricts();
+    return districtRepository.districts;
   }
 
-  public LiveData<Response<List<CandidateDataModel>>> fetchCandidatesByDistrict(String districtId) {
-
-    return districtRepository.getchAllCandidatesByDistrict(districtId);
+  public LiveData<List<CandidateDataModel>> fetchCandidatesByDistrict(String districtId) {
+    districtRepository.getchAllCandidatesByDistrict(districtId);
+    return districtRepository.candidates;
   }
 
   public void selectDistrict(DistrictDataModel district) {
@@ -49,5 +50,13 @@ public class DistrictViewModel extends ViewModel {
 
   public LiveData<CandidateDataModel> getSelectedCandidate() {
     return selectedCandidate;
+  }
+
+  @Override
+  protected void onCleared() {
+    if(districtRepository != null) {
+      districtRepository.cleanup();
+    }
+    super.onCleared();
   }
 }

@@ -67,16 +67,17 @@ public class ManifestosCategoriesFragment extends BackDisabledToolbarFragment im
     manifestoRecyclerView.setAdapter(manifestoAdapter);
 
     manifestoViewModel.getAllManifestoCategories().observe(getViewLifecycleOwner(),
-      new Observer<Response<List<ManifestoCategoryDataModel>>>() {
+      new Observer<List<ManifestoCategoryDataModel>>() {
         @Override
-        public void onChanged(Response<List<ManifestoCategoryDataModel>> listResponse) {
+        public void onChanged(List<ManifestoCategoryDataModel> manifestoCategoryDataModels) {
           progressBar.setVisibility(View.GONE);
-          if(TextUtils.isEmpty(listResponse.errorMessage)) {
-            manifestoAdapter.setData(listResponse.data);
+          if(manifestoCategoryDataModels == null) {
+            if(manifestoAdapter.getItemCount() == 0) {
+              errorText.setText("No districts available");
+            }
           }
-          else{
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("No Manifesto Categories");
+          else {
+            manifestoAdapter.setData(manifestoCategoryDataModels);
           }
         }
       });

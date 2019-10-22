@@ -1,5 +1,6 @@
 package com.mru.ptr.district.ui.repository.disk;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -15,6 +16,9 @@ public interface CandidateDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   public void save(List<CandidateDataModel> candidateDataModels);
+
+  @Query("SELECT * from candidate where district_id=:districtId")
+  LiveData<List<CandidateDataModel>> fetchCandidatesByDistrict(String districtId);
 
 
 }

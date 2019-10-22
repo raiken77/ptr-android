@@ -22,7 +22,10 @@ public class SingletonDatabaseInstance {
 
 
   public void initialiseDatabase(Context applicationContext){
-    this.singletonPTRInstance = Room.databaseBuilder(applicationContext, PTRDatabase.class, DATABASE_NAME).build();
+    this.singletonPTRInstance =
+      Room.databaseBuilder(applicationContext, PTRDatabase.class, DATABASE_NAME)
+      .fallbackToDestructiveMigration()
+      .build();
   }
 
 

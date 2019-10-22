@@ -23,31 +23,29 @@ public class FirebaseDistrictWebService implements DistrictWebService {
 
   private static final String DISTRICTS_PATH = "Circonscription";
   private static final String CANDIDATES_PATH = "Candidates";
+  private DistrictWebServiceCallback callback;
 
+  public FirebaseDistrictWebService(DistrictWebServiceCallback callback) {
+    this.callback = callback;
+  }
 
   @Override
-  public LiveData<Response<List<CandidateDataModel>>> fetchAllCandidatesByDistrict(
+  public void fetchAllCandidatesByDistrict(
     String districtId) {
     String newPath = String.format(Locale.ENGLISH, "%s/%s",CANDIDATES_PATH, districtId);
-    final MutableLiveData<Response<List<CandidateDataModel>>> candidates = new MutableLiveData<>();
 
     FirebaseDatabase.getInstance().getReference(newPath).addListenerForSingleValueEvent(
       new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
           List<CandidateDataModel> candidateDataModels = new ArrayList<>();
-          Response<List<CandidateDataModel>> response = new Response<>();
 
           for(DataSnapshot child : dataSnapshot.getChildren()) {
             candidateDataModels.add(child.getValue(CandidateDataModel.class));
           }
 
-          response
-            .setData(candidateDataModels)
-            .setStatus(ResponseStatus.SUCCESS)
-            .setErrorMessage(null);
+          callback.onAssociatedCandidatesfetched(candidateDataModels);
 
-          candidates.setValue(response);
         }
 
         @Override
@@ -55,29 +53,22 @@ public class FirebaseDistrictWebService implements DistrictWebService {
 
         }
       });
-    return candidates;
+
   }
 
   @Override
-  public LiveData<Response<List<DistrictDataModel>>> fetchAllDistricts() {
-    final MutableLiveData<Response<List<DistrictDataModel>>> districts = new MutableLiveData<>();
+  public void fetchAllDistricts() {
 
     FirebaseDatabase.getInstance().getReference(DISTRICTS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         List<DistrictDataModel> districtsFetched = new ArrayList<>();
-        Response<List<DistrictDataModel>> response = new Response<>();
 
         for(DataSnapshot currentNode : dataSnapshot.getChildren()) {
           districtsFetched.add(currentNode.getValue(DistrictDataModel.class));
         }
 
-        response
-          .setData(districtsFetched)
-          .setStatus(ResponseStatus.SUCCESS)
-          .setErrorMessage(null);
-
-        districts.setValue(response);
+        callback.onFetched(districtsFetched);
       }
 
       @Override
@@ -86,7 +77,10 @@ public class FirebaseDistrictWebService implements DistrictWebService {
       }
     });
 
-    return districts;
   }
 
+  @Override
+  public void cleanWebServiceCallback() {
+    this.callback = null;
+  }
 }

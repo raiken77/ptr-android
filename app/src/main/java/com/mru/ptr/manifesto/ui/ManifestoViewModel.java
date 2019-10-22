@@ -24,12 +24,14 @@ public class ManifestoViewModel extends ViewModel {
     selectedManifesto = new MutableLiveData<>();
   }
 
-  public LiveData<Response<List<ManifestoCategoryDataModel>>> getAllManifestoCategories() {
-    return repository.fetchAllManifestoCategories();
+  public LiveData<List<ManifestoCategoryDataModel>> getAllManifestoCategories() {
+    repository.fetchAllManifestoCategories();
+    return repository.categories;
   }
 
-  public LiveData<Response<List<ManifestoDataModel>>> getAllManifestosByCategory(String categoryId) {
-    return repository.fetchAllManifestosByCategory(categoryId);
+  public LiveData<List<ManifestoDataModel>> getAllManifestosByCategory(String categoryId) {
+    repository.fetchAllManifestosByCategory(categoryId);
+    return repository.manifestos;
   }
 
   public void selectCategory(ManifestoCategoryDataModel dataModel) {
@@ -48,5 +50,11 @@ public class ManifestoViewModel extends ViewModel {
     return this.selectedManifesto;
   }
 
-
+  @Override
+  protected void onCleared() {
+    if(this.repository != null) {
+      this.repository.cleanup();
+    }
+    super.onCleared();
+  }
 }

@@ -14,4 +14,29 @@
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     />
+
+  <ProgressBar
+    android:id="@+id/loading_progress"
+    android:visibility="gone"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    />
+
+  <androidx.appcompat.widget.AppCompatTextView
+    style="@style/BlackTextMediumStyle"
+    android:id="@+id/error_message_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:visibility="gone"
+    android:text="No Data Present"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>
