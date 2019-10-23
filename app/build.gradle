@@ -10,6 +10,13 @@ android {
             keyAlias = 'ptr-staging-key'
             keyPassword '}3F*A<v^d`:#hgxfvXGV&FrH'
         }
+
+        release {
+            storeFile file('/Users/jonathan/Desktop/ptr-release/release-key')
+            storePassword ',!5$Lwk+E/VG+d:3'
+            keyAlias = 'upload-key'
+            keyPassword '%E3rv&^Qx(8espK6QT;]'
+        }
     }
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
@@ -21,6 +28,18 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+
+    bundle {
+        language {
+            enableSplit = true
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
     }
     buildTypes {
         debug {
@@ -39,6 +58,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 

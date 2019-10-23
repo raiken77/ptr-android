@@ -73,10 +73,10 @@ public class ManifestosFragment extends BackEnabledToolbarFragment implements Re
               @Override
               public void onChanged(List<ManifestoDataModel> manifestoDataModels) {
                 progressBar.setVisibility(View.GONE);
-                if(manifestoDataModels == null) {
-                  if (adapter != null && adapter.getItemCount() == 0) {
 
-                  }
+                if(manifestoDataModels != null && manifestoDataModels.isEmpty()) {
+                  errorText.setText("No Manifestos for this category yet.");
+                  adapter.setData(manifestoDataModels);
                 }
                 else {
                   adapter.setData(manifestoDataModels);

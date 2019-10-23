@@ -62,7 +62,7 @@ public class ManifestoCategoryAdapter extends RecyclerView.Adapter<ManifestoCate
     return manifestoCategoryDataModels.size();
   }
 
-  public class ManifestoCategoryViewHolder extends ViewHolder implements View.OnClickListener {
+  public static class ManifestoCategoryViewHolder extends ViewHolder implements View.OnClickListener {
 
     private AppCompatImageView manifestoCategoryImage;
     private AppCompatTextView manifestoCategoryText;

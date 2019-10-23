@@ -57,7 +57,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosViewHolder> {
     return this.photoDataModels.get(position);
   }
 
-  public class PhotosViewHolder extends ViewHolder implements View.OnClickListener {
+  public static class PhotosViewHolder extends ViewHolder implements View.OnClickListener {
 
     AppCompatImageView image;
 

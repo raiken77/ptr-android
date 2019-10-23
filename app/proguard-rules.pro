@@ -22,14 +22,15 @@
 
 #Firebase and Glide rules
 -keepattributes *Annotation*, Signature, Exception
-
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
 
 # App data models
 -keepclassmembers class com.mru.ptr.district.ui.model.** {*;}
 -keepclassmembers class com.mru.ptr.event.ui.model.** {*;}
 -keepclassmembers class com.mru.ptr.event.ui.model.** {*;}
--keepclassmembers class com.mru.ptr.gallery.ui.VideoDataModel
--keepclassmembers class com.mru.ptr.gallery.ui.PhotoDataModel
+-keepclassmembers class com.mru.ptr.gallery.ui.VideoDataModel {*;}
+-keepclassmembers class com.mru.ptr.gallery.ui.PhotoDataModel {*;}
 -keepclassmembers class com.mru.ptr.manifesto.ui.model.** {*;}
 
 # Glide
@@ -39,6 +40,8 @@
   **[] $VALUES;
   public *;
 }
+
+
 
 
 
