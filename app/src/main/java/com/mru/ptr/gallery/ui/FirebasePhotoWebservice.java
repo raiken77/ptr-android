@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mru.ptr.GenericWebserviceCallback;
 import com.mru.ptr.Response;
 import com.mru.ptr.ResponseStatus;
 import java.util.ArrayList;
@@ -18,42 +19,41 @@ import java.util.List;
  */
 public class FirebasePhotoWebservice implements PhotoWebService {
   private final static String PHOTO_PATH = "Images";
+  private GenericWebserviceCallback<List<PhotoDataModel>> genericWebserviceCallback;
 
-  public FirebasePhotoWebservice() {
+  private ValueEventListener valueEventListener = new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+      List<PhotoDataModel> photosRetrieved = new ArrayList<>();
+
+      for (DataSnapshot photo : dataSnapshot.getChildren()) {
+        photosRetrieved.add(photo.getValue(PhotoDataModel.class));
+      }
+
+      if(genericWebserviceCallback != null) {
+        genericWebserviceCallback.onFetched(photosRetrieved);
+      }
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+  };
+
+  public FirebasePhotoWebservice(GenericWebserviceCallback<List<PhotoDataModel>> genericWebserviceCallback) {
+    this.genericWebserviceCallback = genericWebserviceCallback;
   }
 
 
 
   @Override
-  public LiveData<Response<List<PhotoDataModel>>> fetchAllPhotos() {
-    final MutableLiveData<Response<List<PhotoDataModel>>> photoLiveData = new MutableLiveData<>();
+  public void fetchAllPhotos() {
+    FirebaseDatabase.getInstance().getReference(PHOTO_PATH).addValueEventListener(valueEventListener);
+  }
 
-    FirebaseDatabase.getInstance().getReference(PHOTO_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        if (dataSnapshot.exists()) {
-          List<PhotoDataModel> photosRetrieved = new ArrayList<>();
-          Response<List<PhotoDataModel>> photosResponse = new Response<>();
-
-          for (DataSnapshot photo : dataSnapshot.getChildren()) {
-            photosRetrieved.add(photo.getValue(PhotoDataModel.class));
-          }
-
-          photosResponse
-            .setData(photosRetrieved)
-            .setErrorMessage(null)
-            .setStatus(ResponseStatus.SUCCESS);
-
-          photoLiveData.postValue(photosResponse);
-        }
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError databaseError) {
-
-      }
-    });
-
-    return photoLiveData;
+  @Override
+  public void cleanWebServiceCallback() {
+    this.genericWebserviceCallback = null;
   }
 }

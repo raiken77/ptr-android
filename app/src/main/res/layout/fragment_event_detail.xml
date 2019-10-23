@@ -38,7 +38,7 @@
     android:id="@+id/event_guideline"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintGuide_percent="0.2"
+    app:layout_constraintGuide_percent="0.25"
     android:orientation="horizontal"
     />
 
@@ -81,15 +81,17 @@
     <androidx.appcompat.widget.AppCompatTextView
       style="@style/BlackTextRegularStyle"
       android:id="@+id/event_title"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:textSize="18sp"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintTop_toTopOf="@id/event_date"
       app:layout_constraintBottom_toBottomOf="@id/event_time"
+      app:layout_constraintRight_toLeftOf="@id/event_date"
       android:text="Event title"
       android:layout_marginLeft="16dp"
       app:layout_goneMarginStart="16dp"
+      android:layout_marginRight="16dp"
       />
 
     <View

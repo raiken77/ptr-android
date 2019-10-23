@@ -2,6 +2,7 @@ package com.mru.ptr;
 
 import android.app.Application;
 import androidx.appcompat.app.AppCompatDelegate;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mru.ptr.database.SingletonDatabaseInstance;
 import com.mru.ptr.executor.PTRExecutor;
 
@@ -15,6 +16,7 @@ public class PtrApplication extends Application {
     super.onCreate();
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     PTRExecutor.initialiseExecutors();
+    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 //    SingletonDatabaseInstance.getInstance().initialiseDatabase(this);
   }
 }

@@ -17,17 +17,17 @@ public class ManifestoViewModel extends ViewModel {
   private ManifestoRepository repository;
   private final MutableLiveData<ManifestoCategoryDataModel> selectedCategory;
   private final MutableLiveData<ManifestoDataModel> selectedManifesto;
+  public LiveData<List<ManifestoCategoryDataModel>> manifestoCategories;
 
   public ManifestoViewModel() {
     this.repository = new ManifestoRepository();
     selectedCategory = new MutableLiveData<>();
     selectedManifesto = new MutableLiveData<>();
+    manifestoCategories = this.repository.categories;
+    this.repository.fetchAllManifestoCategories();
   }
 
-  public LiveData<List<ManifestoCategoryDataModel>> getAllManifestoCategories() {
-    repository.fetchAllManifestoCategories();
-    return repository.categories;
-  }
+
 
   public LiveData<List<ManifestoDataModel>> getAllManifestosByCategory(String categoryId) {
     repository.fetchAllManifestosByCategory(categoryId);

@@ -11,15 +11,24 @@ import java.util.List;
  */
 public class PhotoViewModel extends ViewModel {
   private LiveData<List<PhotoDataModel>> viewModelData;
+  public LiveData<List<PhotoDataModel>> photoDataModel;
   private PhotoRepository photoRepository;
+  private MutableLiveData<PhotoDataModel> selectedPhoto = new MutableLiveData<>();
 
   public PhotoViewModel() {
     viewModelData = new MutableLiveData<>();
     photoRepository = new PhotoRepository();
+    photoDataModel = photoRepository.photosRetrieved;
+    photoRepository.fetchAllPhotos();
   }
 
 
-  public LiveData<Response<List<PhotoDataModel>>> getAllPhotos() {
-    return photoRepository.fetchAllPhotos();
+  public void selectPhoto(PhotoDataModel photoDataModel) {
+    selectedPhoto.setValue(photoDataModel);
   }
+
+  public LiveData<PhotoDataModel> getSelectedDataModel() {
+    return selectedPhoto;
+  }
+
 }

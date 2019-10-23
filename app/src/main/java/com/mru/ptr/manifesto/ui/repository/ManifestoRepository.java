@@ -1,17 +1,13 @@
 package com.mru.ptr.manifesto.ui.repository;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.mru.ptr.Response;
-import com.mru.ptr.district.ui.model.DistrictDataModel;
-import com.mru.ptr.executor.PTRExecutor;
 import com.mru.ptr.manifesto.ui.model.ManifestoCategoryDataModel;
 import com.mru.ptr.manifesto.ui.model.ManifestoDataModel;
 import com.mru.ptr.manifesto.ui.repository.disk.ManifestoCategoryDao;
 import com.mru.ptr.manifesto.ui.repository.disk.ManifestoDao;
+import com.mru.ptr.manifesto.ui.repository.webservice.FirebaseManifestoWebService;
 import com.mru.ptr.manifesto.ui.repository.webservice.ManifestoWebService;
 import com.mru.ptr.manifesto.ui.repository.webservice.ManifestoWebServiceCallback;
-import com.mru.ptr.manifesto.ui.repository.webservice.MockManifestoWebService;
 import java.util.List;
 
 /**
@@ -26,7 +22,7 @@ public class ManifestoRepository implements ManifestoWebServiceCallback {
   public MutableLiveData<List<ManifestoDataModel>> manifestos = new MutableLiveData<>();
 
   public ManifestoRepository() {
-    this.manifestoWebService = new MockManifestoWebService(this);
+    this.manifestoWebService = new FirebaseManifestoWebService(this);
   }
 
 

@@ -19,6 +19,7 @@ import com.mru.ptr.district.ui.DistrictsFragment;
 import com.mru.ptr.event.ui.EventDetailFragment;
 import com.mru.ptr.event.ui.EventsFragment;
 import com.mru.ptr.gallery.ui.GalleryFrament;
+import com.mru.ptr.imageviewer.ImageViewerFragment;
 import com.mru.ptr.manifesto.ui.ManifestoDetailFragment;
 import com.mru.ptr.manifesto.ui.ManifestosCategoriesFragment;
 import com.mru.ptr.manifesto.ui.ManifestosFragment;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     fragmentManager = getSupportFragmentManager();
 
     bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+    bottomNavigationView.setItemIconTintList(null);
     bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
     if(savedInstanceState == null) {
@@ -71,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     return false;
   }
+
+
 
   private Fragment getClickedBottomBarItemFragment(int menuItemId) {
     switch(menuItemId) {
@@ -112,37 +116,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
   }
 
   public void showEventDetailPage(View sharedElement) {
-    Fragment chooserFragment = fragmentManager.findFragmentById(R.id.current_fragment);
-    Fragment fragment = new EventDetailFragment();
-//    // Set up the transaction.
-    FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-
-    if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-//      // only for gingerbread and newer versions
-//
-//      // Define the shared element transition.
-      fragment.setSharedElementEnterTransition(new RowDetailTransition());
-      fragment.setSharedElementReturnTransition(new RowDetailTransition());
-//
-//      // The rest of the views are just fading in/out.
-//      fragment.setEnterTransition(new Fade());
-//      chooserFragment.setExitTransition(new Fade());
-//
-//      // Now use the image's view and the target transitionName to define the shared element.
-      transaction.addSharedElement(sharedElement, "bar");
-//    }
-//
-//    // Replace the fragment.
-
-  }
-    transaction.replace(R.id.current_fragment, fragment);
-//
-//    // Enable back navigation with shared element transitions.
-    transaction.addToBackStack(null);
-//
-//    // Finally press play.
-    transaction.commit();
+    switchFragment(new EventDetailFragment());
   }
 
   public void showCandidateDetailPage(View sharedElement) {
@@ -171,6 +145,19 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
       R.anim.slide_down
     );
     fragmentTransaction.add(R.id.video_player, VideoPlayerFragment.newInstance(url));
+    fragmentTransaction.addToBackStack(null);
+    fragmentTransaction.commit();
+  }
+
+  public void showImage() {
+    fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentTransaction.setCustomAnimations(
+      R.anim.slide_up,
+      R.anim.slide_down,
+      R.anim.slide_up,
+      R.anim.slide_down
+    );
+    fragmentTransaction.add(R.id.video_player, new ImageViewerFragment());
     fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
   }

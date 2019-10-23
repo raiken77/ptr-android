@@ -29,8 +29,8 @@
    app:layout_constraintBottom_toBottomOf="parent"
    app:menu="@menu/bottom_navigation_menu"
    android:background="@android:color/white"
-   app:itemIconTint="@drawable/bottom_nav_item_selector"
-   app:itemTextColor="@drawable/bottom_nav_item_selector"
+   app:itemTextColor="@color/app_red"
+   app:labelVisibilityMode="selected"
    />
 
  <FrameLayout

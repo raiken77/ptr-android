@@ -14,31 +14,60 @@
   >
 
 
+
+
   <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/candidate_detail_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/candidate_detail_guideline"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintGuide_percent="0.5"
+      android:orientation="horizontal"
+      />
+
     <View
-      android:id="@+id/candidate_background"
-      android:layout_width="0dp"
-      android:layout_height="90dp"
-      android:background="@color/app_red"
+      android:id="@+id/red_rectangle"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
+      android:layout_width="0dp"
+      android:layout_height="70dp"
+      android:background="@color/app_red"
       />
+
+    <View
+      android:id="@+id/blue_rectangle"
+      android:layout_width="0dp"
+      android:layout_height="70dp"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/red_rectangle"
+      android:background="@color/blue_background"
+      />
+
+<!--    <View-->
+<!--      android:id="@+id/candidate_background"-->
+<!--      android:layout_width="0dp"-->
+<!--      android:layout_height="90dp"-->
+<!--      android:background="@color/app_red"-->
+<!--      app:layout_constraintTop_toTopOf="parent"-->
+<!--      app:layout_constraintLeft_toLeftOf="parent"-->
+<!--      app:layout_constraintRight_toRightOf="parent"-->
+<!--      />-->
 
 
     <com.mru.ptr.CircularImageView
       android:id="@+id/candidate_image"
       android:layout_width="100dp"
       android:layout_height="100dp"
-      app:layout_constraintTop_toBottomOf="@id/candidate_background"
-      app:layout_constraintBottom_toBottomOf="@id/candidate_background"
+      app:layout_constraintTop_toBottomOf="@id/red_rectangle"
+      app:layout_constraintBottom_toBottomOf="@id/red_rectangle"
       app:layout_constraintLeft_toLeftOf="parent"
       android:layout_marginLeft="16dp"
       android:layout_marginStart="16dp"
@@ -52,23 +81,13 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:layout_constraintLeft_toRightOf="@id/candidate_image"
-      app:layout_constraintTop_toTopOf="@id/candidate_image"
+      app:layout_constraintBottom_toTopOf="@id/candidate_detail_guideline"
+      android:layout_marginBottom="8dp"
       android:text="Shakeel Mohammed"
       android:layout_marginLeft="10dp"
       android:layout_marginStart="10dp"
       android:textSize="18sp"
       android:textColor="@android:color/white"
-      />
-
-    <androidx.appcompat.widget.AppCompatTextView
-      android:id="@+id/candidate_party"
-      style="@style/BlackTextMediumStyle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:layout_constraintTop_toBottomOf="@id/candidate_full_name"
-      app:layout_constraintLeft_toLeftOf="@id/candidate_full_name"
-      android:textColor="@android:color/white"
-      android:text="PTR"
       />
   </androidx.constraintlayout.widget.ConstraintLayout>
 

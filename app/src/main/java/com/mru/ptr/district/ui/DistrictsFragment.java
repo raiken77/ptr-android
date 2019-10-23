@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
@@ -63,13 +64,16 @@ public class DistrictsFragment extends BackDisabledToolbarFragment implements Re
     progressBar.setVisibility(View.VISIBLE);
     recyclerLayoutManager = new LinearLayoutManager(getContext());
     ItemDecoration marginDecorator = new MarginItemDecoration(5, 5, 0, 0);
+    ItemDecoration dividerDecorator = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+
     districtRecyclerView.addItemDecoration(marginDecorator);
+    districtRecyclerView.addItemDecoration(dividerDecorator);
     districtAdapter = new DistrictAdapter(districtDataModels, this);
 
     districtRecyclerView.setLayoutManager(recyclerLayoutManager);
     districtRecyclerView.setAdapter(districtAdapter);
 
-    districtViewModel.fetchAllDistricts().observe(getViewLifecycleOwner(),
+    districtViewModel.districtsData.observe(getViewLifecycleOwner(),
       new Observer<List<DistrictDataModel>>() {
         @Override
         public void onChanged(List<DistrictDataModel> districtDataModels) {

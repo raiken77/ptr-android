@@ -1,11 +1,14 @@
 package com.mru.ptr.district.ui.repository;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import com.mru.ptr.Response;
 import com.mru.ptr.district.ui.model.CandidateDataModel;
 import com.mru.ptr.district.ui.model.DistrictDataModel;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,21 +20,23 @@ public class DistrictViewModel extends ViewModel {
   private final MutableLiveData<CandidateDataModel> selectedCandidate;
   private final MutableLiveData<DistrictDataModel> selectedDataModel;
   private DistrictRepository districtRepository;
+  public MutableLiveData<List<DistrictDataModel>> districtsData;
+  private MutableLiveData<String> districtId = new MutableLiveData<>();
 
   public DistrictViewModel() {
+
     districtData = new MutableLiveData<>();
     selectedDataModel = new MutableLiveData<>();
     districtRepository = new DistrictRepository();
     selectedCandidate = new MutableLiveData<>();
-  }
-
-
-  public LiveData<List<DistrictDataModel>> fetchAllDistricts() {
+    districtsData = districtRepository.districts;
     districtRepository.fetchAllDistricts();
-    return districtRepository.districts;
   }
+
+
 
   public LiveData<List<CandidateDataModel>> fetchCandidatesByDistrict(String districtId) {
+
     districtRepository.getchAllCandidatesByDistrict(districtId);
     return districtRepository.candidates;
   }

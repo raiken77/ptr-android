@@ -16,6 +16,8 @@ public class PhotoDataModel {
 
   public String pictureUrl;
 
+  public String description;
+
   public String getImageId() {
     return imageId;
   }
@@ -40,6 +42,15 @@ public class PhotoDataModel {
 
   public PhotoDataModel setPictureUrl(String pictureUrl) {
     this.pictureUrl = pictureUrl;
+    return this;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public PhotoDataModel setDescription(String description) {
+    this.description = description;
     return this;
   }
 }

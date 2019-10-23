@@ -43,7 +43,7 @@ public class CandidatesFragment extends BackEnabledToolbarFragment implements
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    candidateDataModels = new ArrayList<>();
+
   }
 
   @Nullable
@@ -56,6 +56,7 @@ public class CandidatesFragment extends BackEnabledToolbarFragment implements
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    candidateDataModels = new ArrayList<>();
     candidateDetailList = view.findViewById(R.id.list);
     progressBar = view.findViewById(R.id.loading_progress);
     errorText = view.findViewById(R.id.error_message_text);

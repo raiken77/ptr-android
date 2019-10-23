@@ -1,6 +1,7 @@
 package com.mru.ptr.event.ui.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -26,6 +27,7 @@ public class EventDataModel {
   public String getEventId() {
     return eventId;
   }
+
 
   public EventDataModel setEventId(String eventId) {
     this.eventId = eventId;
@@ -67,4 +69,5 @@ public class EventDataModel {
     this.title = title;
     return this;
   }
+
 }

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,15 +18,17 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import com.mru.ptr.MainActivity;
 import com.mru.ptr.R;
 import com.mru.ptr.Response;
+import com.mru.ptr.utils.RecyclerViewClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Jonathan on 2019-10-09.
  */
-public class PhotosFragment extends Fragment {
+public class PhotosFragment extends Fragment implements RecyclerViewClickListener {
 
   RecyclerView photosRecyclerView;
   PhotosAdapter adapter;
@@ -39,7 +42,7 @@ public class PhotosFragment extends Fragment {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     photos = new ArrayList<>();
-    photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
+    photoViewModel = ViewModelProviders.of(getActivity()).get(PhotoViewModel.class);
   }
 
   @Nullable
@@ -56,19 +59,19 @@ public class PhotosFragment extends Fragment {
     progressBar = view.findViewById(R.id.loading_progress);
     errorText = view.findViewById(R.id.error_message_text);
     progressBar.setVisibility(View.VISIBLE);
-    adapter = new PhotosAdapter(photos);
-    LayoutManager layoutManager = new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false);
+    adapter = new PhotosAdapter(photos, this);
+    LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false);
 
     photosRecyclerView.setLayoutManager(layoutManager);
     photosRecyclerView.setAdapter(adapter);
 
-    photoViewModel.getAllPhotos().observe(getViewLifecycleOwner(),
-      new Observer<Response<List<PhotoDataModel>>>() {
+    photoViewModel.photoDataModel.observe(getViewLifecycleOwner(),
+      new Observer<List<PhotoDataModel>>() {
         @Override
-        public void onChanged(Response<List<PhotoDataModel>> listResponse) {
+        public void onChanged(List<PhotoDataModel> photoDataModels) {
           progressBar.setVisibility(View.GONE);
-          if(TextUtils.isEmpty(listResponse.errorMessage)) {
-            adapter.setData(listResponse.data);
+          if(photoDataModels != null && !photoDataModels.isEmpty()) {
+            adapter.setData(photoDataModels);
           }
           else {
             errorText.setVisibility(View.VISIBLE);
@@ -76,5 +79,13 @@ public class PhotosFragment extends Fragment {
           }
         }
       });
+  }
+
+  @Override
+  public void onItemSelected(View view, int position) {
+    if(getActivity() != null && getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+      photoViewModel.selectPhoto(adapter.getItem(position));
+      ((MainActivity) getActivity()).showImage();
+    }
   }
 }

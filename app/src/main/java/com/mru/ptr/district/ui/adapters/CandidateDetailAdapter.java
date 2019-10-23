@@ -70,7 +70,6 @@ public class CandidateDetailAdapter extends RecyclerView.Adapter<CandidateDetail
     private WeakReference<RecyclerViewClickListener> clickListenerWeakReference;
     private AppCompatImageView candidateImage;
     private AppCompatTextView candidateName;
-    private AppCompatTextView candidateParty;
 
 
     public CandidateDetailViewHolder(@NonNull View itemView, RecyclerViewClickListener clickListener) {
@@ -78,7 +77,6 @@ public class CandidateDetailAdapter extends RecyclerView.Adapter<CandidateDetail
       clickListenerWeakReference = new WeakReference<>(clickListener);
       candidateImage = itemView.findViewById(R.id.candidate_image);
       candidateName = itemView.findViewById(R.id.candidate_full_name);
-      candidateParty = itemView.findViewById(R.id.candidate_party);
 
       itemView.setOnClickListener(this);
       candidateImage.setOnClickListener(this);
@@ -86,7 +84,6 @@ public class CandidateDetailAdapter extends RecyclerView.Adapter<CandidateDetail
 
     public void bindData(CandidateDataModel row) {
       candidateName.setText(String.format(Locale.ENGLISH, "%s %s", row.name, row.familyName));
-      candidateParty.setText(row.party);
       if(!TextUtils.isEmpty(row.imageUrl)) {
         Glide.with(itemView.getContext())
           .load(row.imageUrl)

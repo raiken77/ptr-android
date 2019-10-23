@@ -18,14 +18,12 @@ public class VideoViewModel extends ViewModel {
 
   public VideoViewModel() {
     this.repository = new VideoRepository();
-    this.videoData = new MutableLiveData<>();
+    this.videoData = this.repository.videos;
     this.selectedVideo = new MutableLiveData<>();
+    this.repository.fetchAllVideos();
   }
 
 
-  public LiveData<Response<List<VideoDataModel>>> getAllVideos() {
-    return this.repository.fetchAllVideos();
-  }
 
   public void selectVideo(VideoDataModel videoDataModel) {
     this.selectedVideo.setValue(videoDataModel);

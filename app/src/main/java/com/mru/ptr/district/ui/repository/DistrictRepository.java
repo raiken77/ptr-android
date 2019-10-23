@@ -10,6 +10,7 @@ import com.mru.ptr.district.ui.repository.disk.CandidateDao;
 import com.mru.ptr.district.ui.repository.disk.DistrictDao;
 import com.mru.ptr.district.ui.repository.webservice.DistrictWebService;
 import com.mru.ptr.district.ui.repository.webservice.DistrictWebServiceCallback;
+import com.mru.ptr.district.ui.repository.webservice.FirebaseDistrictWebService;
 import com.mru.ptr.district.ui.repository.webservice.MockDistrictWebService;
 import com.mru.ptr.executor.PTRExecutor;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DistrictRepository implements DistrictWebServiceCallback {
   public MutableLiveData<List<CandidateDataModel>> candidates = new MutableLiveData<>();
 
   public DistrictRepository() {
-    this.districtWebService = new MockDistrictWebService(this);
+    this.districtWebService = new FirebaseDistrictWebService(this);
   }
 
   public void fetchAllDistricts() {

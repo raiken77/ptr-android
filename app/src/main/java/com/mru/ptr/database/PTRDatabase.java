@@ -29,7 +29,7 @@ import com.mru.ptr.manifesto.ui.repository.disk.ManifestoDao;
   ManifestoDataModel.class,
   ManifestoCategoryDataModel.class
 },
-  version = 1
+  version = 2
 )
 public abstract class PTRDatabase extends RoomDatabase {
   public abstract EventDao eventDao();

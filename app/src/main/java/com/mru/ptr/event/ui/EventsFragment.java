@@ -3,6 +3,7 @@ package com.mru.ptr.event.ui;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,7 +62,7 @@ public class EventsFragment extends BackDisabledToolbarFragment implements Recyc
     eventsRecyclerView.setLayoutManager(recyclerLayoutManager);
     eventsRecyclerView.setAdapter(eventsAdapter);
 
-    eventsViewModel.fetchAllEvents().observe(getViewLifecycleOwner(),
+    eventsViewModel.events.observe(getViewLifecycleOwner(),
       new Observer<List<EventDataModel>>() {
         @Override
         public void onChanged(List<EventDataModel> eventDataModels) {
@@ -73,6 +75,7 @@ public class EventsFragment extends BackDisabledToolbarFragment implements Recyc
           }
         }
       });
+
   }
 
 

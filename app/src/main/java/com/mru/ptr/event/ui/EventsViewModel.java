@@ -5,10 +5,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import com.google.firebase.database.DataSnapshot;
 import com.mru.ptr.Response;
 import com.mru.ptr.ResponseStatus;
+import com.mru.ptr.SingleLiveEvent;
 import com.mru.ptr.event.ui.model.EventDataModel;
 import com.mru.ptr.event.ui.repository.EventRepository;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,20 +19,20 @@ import java.util.List;
  */
 public class EventsViewModel extends ViewModel {
 
-  private final MutableLiveData<EventDataModel> selectedDataModel;
+  private final SingleLiveEvent<EventDataModel> selectedDataModel;
+
+  public LiveData<List<EventDataModel>> events;
 
   private EventRepository eventRepository;
 
   public EventsViewModel() {
-    selectedDataModel = new MutableLiveData<>();
+    selectedDataModel = new SingleLiveEvent<>();
     eventRepository = new EventRepository();
-  }
-
-
-  public LiveData<List<EventDataModel>> fetchAllEvents() {
+    events = eventRepository.events;
     eventRepository.fetchAllEvents();
-    return eventRepository.events;
   }
+
+
 
   public void selectEvent(EventDataModel event) {
     selectedDataModel.setValue(event);

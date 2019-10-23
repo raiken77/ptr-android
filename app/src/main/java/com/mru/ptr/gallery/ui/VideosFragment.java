@@ -68,13 +68,13 @@ public class VideosFragment extends Fragment implements RecyclerViewClickListene
     videoRecyclerView.setLayoutManager(manager);
     videoRecyclerView.setAdapter(videosAdapter);
 
-    viewModel.getAllVideos().observe(getViewLifecycleOwner(),
-      new Observer<Response<List<VideoDataModel>>>() {
+    viewModel.videoData.observe(getViewLifecycleOwner(),
+      new Observer<List<VideoDataModel>>() {
         @Override
-        public void onChanged(Response<List<VideoDataModel>> listResponse) {
+        public void onChanged(List<VideoDataModel> videoDataModels) {
           progressBar.setVisibility(View.GONE);
-          if(TextUtils.isEmpty(listResponse.errorMessage)) {
-            videosAdapter.setData(listResponse.data);
+          if(videoDataModels != null && !videoDataModels.isEmpty()) {
+            videosAdapter.setData(videoDataModels);
           }
           else {
             errorText.setVisibility(View.VISIBLE);

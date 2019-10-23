@@ -25,6 +25,42 @@ public class FirebaseDistrictWebService implements DistrictWebService {
   private static final String CANDIDATES_PATH = "Candidates";
   private DistrictWebServiceCallback callback;
 
+  private ValueEventListener districtValueListener = new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+      List<DistrictDataModel> districtsFetched = new ArrayList<>();
+
+      for(DataSnapshot currentNode : dataSnapshot.getChildren()) {
+        districtsFetched.add(currentNode.getValue(DistrictDataModel.class));
+      }
+
+      callback.onFetched(districtsFetched);
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+  };
+
+  private ValueEventListener candidatesValueListener = new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+      List<CandidateDataModel> candidateDataModels = new ArrayList<>();
+
+      for(DataSnapshot child : dataSnapshot.getChildren()) {
+        candidateDataModels.add(child.getValue(CandidateDataModel.class));
+      }
+
+      callback.onAssociatedCandidatesfetched(candidateDataModels);
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+  };
+
   public FirebaseDistrictWebService(DistrictWebServiceCallback callback) {
     this.callback = callback;
   }
@@ -34,48 +70,14 @@ public class FirebaseDistrictWebService implements DistrictWebService {
     String districtId) {
     String newPath = String.format(Locale.ENGLISH, "%s/%s",CANDIDATES_PATH, districtId);
 
-    FirebaseDatabase.getInstance().getReference(newPath).addListenerForSingleValueEvent(
-      new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-          List<CandidateDataModel> candidateDataModels = new ArrayList<>();
-
-          for(DataSnapshot child : dataSnapshot.getChildren()) {
-            candidateDataModels.add(child.getValue(CandidateDataModel.class));
-          }
-
-          callback.onAssociatedCandidatesfetched(candidateDataModels);
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-      });
+    FirebaseDatabase.getInstance().getReference(newPath).addListenerForSingleValueEvent(candidatesValueListener);
 
   }
 
   @Override
   public void fetchAllDistricts() {
 
-    FirebaseDatabase.getInstance().getReference(DISTRICTS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        List<DistrictDataModel> districtsFetched = new ArrayList<>();
-
-        for(DataSnapshot currentNode : dataSnapshot.getChildren()) {
-          districtsFetched.add(currentNode.getValue(DistrictDataModel.class));
-        }
-
-        callback.onFetched(districtsFetched);
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError databaseError) {
-
-      }
-    });
+    FirebaseDatabase.getInstance().getReference(DISTRICTS_PATH).addValueEventListener(districtValueListener);
 
   }
 

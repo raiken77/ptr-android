@@ -22,6 +22,45 @@ public class FirebaseManifestoWebService implements ManifestoWebService {
 
   private final static String MANIFESTO_PATH = "Manifesto";
   private final static String MANIFESTO_CATEGORIES_PATH = "ManifestoCategory";
+  private ValueEventListener manifestoCategoriesListener = new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+      List<ManifestoCategoryDataModel> categories = new ArrayList<>();
+
+      for (DataSnapshot child : dataSnapshot.getChildren()) {
+        categories.add(child.getValue(ManifestoCategoryDataModel.class));
+      }
+
+      if(callback != null) {
+        callback.onFetched(categories);
+      }
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+  };
+
+  private ValueEventListener manifestoListener = new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+      List<ManifestoDataModel> manifestos = new ArrayList<>();
+
+      for(DataSnapshot child : dataSnapshot.getChildren()) {
+        manifestos.add(child.getValue(ManifestoDataModel.class));
+      }
+      if(callback != null) {
+        callback.onManifestosRetrieved(manifestos);
+      }
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+  };
+
   private ManifestoWebServiceCallback callback;
 
   public FirebaseManifestoWebService(ManifestoWebServiceCallback callback) {
@@ -30,53 +69,14 @@ public class FirebaseManifestoWebService implements ManifestoWebService {
 
   @Override
   public void fetchManifestoCategories() {
-
-    FirebaseDatabase.getInstance().getReference(MANIFESTO_CATEGORIES_PATH)
-      .addListenerForSingleValueEvent(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-          List<ManifestoCategoryDataModel> categories = new ArrayList<>();
-
-          for (DataSnapshot child : dataSnapshot.getChildren()) {
-            categories.add(child.getValue(ManifestoCategoryDataModel.class));
-          }
-
-          if(callback != null) {
-            callback.onFetched(categories);
-          }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-      });
-
+    FirebaseDatabase.getInstance().getReference(MANIFESTO_CATEGORIES_PATH).addValueEventListener(manifestoCategoriesListener);
   }
 
   @Override
   public void fetchManifestosByCategoryId(final String categoryId) {
     String newPath = String.format(Locale.ENGLISH, "%s/%s", MANIFESTO_PATH, categoryId);
 
-    FirebaseDatabase.getInstance().getReference(newPath)
-      .addListenerForSingleValueEvent(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-          List<ManifestoDataModel> manifestos = new ArrayList<>();
-
-          for(DataSnapshot child : dataSnapshot.getChildren()) {
-            manifestos.add(child.getValue(ManifestoDataModel.class));
-          }
-          if(callback != null) {
-            callback.onManifestosRetrieved(manifestos);
-          }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-      });
+    FirebaseDatabase.getInstance().getReference(newPath).addValueEventListener(manifestoListener);
 
   }
 

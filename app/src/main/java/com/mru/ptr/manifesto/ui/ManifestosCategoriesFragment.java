@@ -66,7 +66,7 @@ public class ManifestosCategoriesFragment extends BackDisabledToolbarFragment im
     manifestoRecyclerView.setLayoutManager(recyclerLayoutManager);
     manifestoRecyclerView.setAdapter(manifestoAdapter);
 
-    manifestoViewModel.getAllManifestoCategories().observe(getViewLifecycleOwner(),
+    manifestoViewModel.manifestoCategories.observe(getViewLifecycleOwner(),
       new Observer<List<ManifestoCategoryDataModel>>() {
         @Override
         public void onChanged(List<ManifestoCategoryDataModel> manifestoCategoryDataModels) {

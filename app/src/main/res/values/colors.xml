@@ -6,8 +6,9 @@
   <color name="colorSecondary">#D9292A</color>
   <color name="colorAccent">#D81B60</color>
   <color name="colorUnselectedItem">#D5D5D5</color>
-  <color name="colorDivider">#D8D8D8</color>
+  <color name="colorDivider">#4DD8D8D8</color>
   <color name="navy">#323232</color>
   <color name="app_red">#FE4445</color>
   <color name="district_row">#848484</color>
+  <color name="blue_background">#1B47E7</color>
 </resources>

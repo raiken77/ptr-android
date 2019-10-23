@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.bumptech.glide.Glide;
 import com.mru.ptr.R;
 import com.mru.ptr.gallery.ui.PhotosAdapter.PhotosViewHolder;
+import com.mru.ptr.utils.RecyclerViewClickListener;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -18,9 +20,11 @@ import java.util.List;
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosViewHolder> {
 
   List<PhotoDataModel> photoDataModels;
+  private RecyclerViewClickListener clickListener;
 
-  public PhotosAdapter(List<PhotoDataModel> photoDataModels) {
+  public PhotosAdapter(List<PhotoDataModel> photoDataModels, RecyclerViewClickListener clickListener) {
     this.photoDataModels = photoDataModels;
+    this.clickListener = clickListener;
   }
 
   @NonNull
@@ -28,7 +32,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosViewHolder> {
   public PhotosViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
     View inflatedView = inflater.inflate(R.layout.photo_row, parent, false);
-    return new PhotosViewHolder(inflatedView);
+    return new PhotosViewHolder(inflatedView, clickListener);
   }
 
   @Override
@@ -49,19 +53,33 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosViewHolder> {
     return photoDataModels.size();
   }
 
-  public class PhotosViewHolder extends ViewHolder {
+  public PhotoDataModel getItem(int position) {
+    return this.photoDataModels.get(position);
+  }
+
+  public class PhotosViewHolder extends ViewHolder implements View.OnClickListener {
 
     AppCompatImageView image;
 
-    public PhotosViewHolder(@NonNull View itemView) {
+    WeakReference<RecyclerViewClickListener> clickListenerWeakReference;
+    public PhotosViewHolder(@NonNull View itemView, RecyclerViewClickListener clickListener) {
       super(itemView);
       image = itemView.findViewById(R.id.photo);
+      clickListenerWeakReference = new WeakReference<>(clickListener);
+      itemView.setOnClickListener(this);
     }
 
     public void bindData(PhotoDataModel dataModel) {
       Glide.with(itemView.getContext())
         .load(dataModel.pictureUrl)
         .into(image);
+    }
+
+    @Override
+    public void onClick(View view) {
+      if(clickListenerWeakReference.get() != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
+        clickListenerWeakReference.get().onItemSelected(view, getAdapterPosition());
+      }
     }
   }
 

@@ -7,7 +7,7 @@ import androidx.room.Room;
  * Created by Jonathan on 2019-10-21.
  */
 public class SingletonDatabaseInstance {
-  public final static String DATABASE_NAME = "alliance_nationale_database";
+  public final static String DATABASE_NAME = "alliance_nationale";
   private  PTRDatabase singletonPTRInstance;
   private static SingletonDatabaseInstance singletonDatabaseInstance;
 

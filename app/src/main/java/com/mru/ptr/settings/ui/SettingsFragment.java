@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
@@ -48,8 +49,10 @@ public class SettingsFragment extends BackDisabledToolbarFragment implements Rec
     settingsAdapter = new SettingsAdapter(settingsDataModelList, this);
     LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext());
     ItemDecoration marginDecoration = new MarginItemDecoration(15, 15, 0, 0);
+    ItemDecoration dividerDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
 
     settingsList.addItemDecoration(marginDecoration);
+    settingsList.addItemDecoration(dividerDecoration);
     settingsList.setLayoutManager(verticalLayoutManager);
     settingsList.setAdapter(settingsAdapter);
   }
